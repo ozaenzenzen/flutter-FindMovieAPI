@@ -209,22 +209,36 @@ class _HomePageState extends State<HomePage> {
             // ),
             // new SizedBox(height: 20),
 
-            MovDesc(),
-
-            // new FutureBuilder(
-            //   future: connectAPI.getData(),
-            //   builder:
-            //       (BuildContext context, AsyncSnapshot<DetailsAPI> snapshot) {
-            //     if (snapshot.hasData) {
-            //       var desc = snapshot.data;
-            //       // return DescMovie();
-            //     } else {
-            //       return new Center(
-            //         child: new CircularProgressIndicator(),
-            //       );
-            //     }
-            //   },
-            // ),
+            // MovDesc(),
+            
+            //Text = Hasil Pencarian Disini
+            new Container(
+              // height: 200,
+              margin: new EdgeInsets.symmetric(horizontal: 20),
+              // color: Colors.red,
+              child: new Text(
+                "Hasil Pencarian Disini",
+                style: new TextStyle(
+                  fontSize: 20,
+                  fontFamily: "SF",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            new SizedBox(height: 20),
+            
+            //Hasil Film yang muncul
+            new FutureBuilder(
+              future: connectAPI.getData(titleAPI),
+              builder:
+                  (BuildContext context, AsyncSnapshot<DetailsAPI> snapshot) {
+                if (snapshot.hasData) {
+                  return MovDesc();
+                } else {
+                  return Container();
+                }
+              },
+            ),
             new SizedBox(height: 20),
           ],
         ),
