@@ -377,6 +377,7 @@ class MovDesc extends StatelessWidget {
                                   fontFamily: "SF",
                                   // fontWeight: FontWeight.w700,
                                 ),
+                                overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.justify,
                               ),
                               new SizedBox(

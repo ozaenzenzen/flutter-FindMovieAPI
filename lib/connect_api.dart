@@ -9,7 +9,7 @@ class ConnectAPI {
   // ConnectAPI({this.t});
 
   Future<DetailsAPI> getData(String t) async {
-    var connectURL = "http://www.omdbapi.com/?t=" + t + "&apikey=30270331";
+    var connectURL = "https://www.omdbapi.com/?t=" + t + "&apikey=30270331";
     // var connectURL = "http://www.omdbapi.com/?apikey=[30270331]&t=" + t;
     // var requestURL = "http://www.omdbapi.com/?t=The+Avengers";
     var response = await http.get(connectURL);
