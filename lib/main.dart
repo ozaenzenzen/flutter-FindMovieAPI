@@ -169,16 +169,18 @@ class _HomePageState extends State<HomePage> {
             //Search button
             new Container(
               width: 120,
-              // height: 60,
+              height: 50,
               margin: new EdgeInsets.symmetric(horizontal: 20),
-              color: Colors.yellow,
-              child: new CupertinoButton(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.cyan,
+                ),
                 child: new Text(
                   "Cari",
                   style: new TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontFamily: "SF",
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
                 ),
                 onPressed: () {
@@ -191,26 +193,10 @@ class _HomePageState extends State<HomePage> {
                     });
                   }
                 },
-                minSize: 60.0,
-                borderRadius: BorderRadius.circular(12.0),
               ),
-              // new ElevatedButton(
-              //   style: new ButtonStyle(),
-              //   onPressed: () {},
-              //   child: new Text("Cari"),
-              // ),
             ),
             new SizedBox(height: 20),
 
-            // new Container(
-            //   height: 200,
-            //   margin: new EdgeInsets.symmetric(horizontal: 20),
-            //   color: Colors.green,
-            // ),
-            // new SizedBox(height: 20),
-
-            // MovDesc(),
-            
             //Text = Hasil Pencarian Disini
             new Container(
               // height: 200,
@@ -226,7 +212,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             new SizedBox(height: 20),
-            
+
             //Hasil Film yang muncul
             new FutureBuilder(
               future: connectAPI.getData(titleAPI),
@@ -271,62 +257,6 @@ class MovDesc extends StatelessWidget {
           elevation: 15,
           child: new Column(
             children: [
-              // new Row(
-              //   // crossAxisAlignment: CrossAxisAlignment.center,
-              //   children: <Widget>[
-              //     Container(
-              //       margin:
-              //           new EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              //       // alignment: Alignment.centerLeft,
-              //       child: new Image(
-              //         height: 140,
-              //         fit: BoxFit.cover,
-              //         image: new NetworkImage(
-              //           detailsAPI.poster.toString(),
-              //         ),
-              //       ),
-              //     ),
-              //     new Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: [
-              //         Container(
-              //           // color: Colors.black,
-              //           width: 250,
-              //           child: new Text(
-              //             (detailsAPI != null)
-              //                 ? detailsAPI.title.toString()
-              //                 : "Tidak Ada Data Judul",
-              //             style: new TextStyle(
-              //               color: Colors.black,
-              //               fontSize: 20,
-              //               fontFamily: "SF",
-              //               fontWeight: FontWeight.w700,
-              //             ),
-              //           ),
-              //         ),
-              //         new SizedBox(
-              //           height: 20,
-              //         ),
-              //         Container(
-              //             // color: Colors.black,
-              //             width: 320,
-              //             child: new Text(
-              //               (detailsAPI != null)
-              //                   ? detailsAPI.plots.toString()
-              //                   : "Tidak Ada Data Deskripsi",
-              //               textAlign: TextAlign.justify,
-              //               style: new TextStyle(
-              //                 color: Colors.black,
-              //                 // fontSize: 20,
-              //                 fontFamily: "SF",
-              //                 // fontWeight: FontWeight.w700,
-              //               ),
-              //             )),
-              //       ],
-              //     ),
-              //   ],
-              // ),
-
               Container(
                 margin: new EdgeInsets.symmetric(vertical: 10),
                 child: new ListTile(
@@ -377,6 +307,7 @@ class MovDesc extends StatelessWidget {
                                   fontFamily: "SF",
                                   // fontWeight: FontWeight.w700,
                                 ),
+                                maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.justify,
                               ),
@@ -416,20 +347,6 @@ class MovDesc extends StatelessWidget {
                   ),
                 ),
               ),
-
-              // Container(
-              //   margin: new EdgeInsets.only(right: 10, bottom: 10),
-              //   alignment: Alignment.centerRight,
-              //   child: new InkWell(
-              //     onTap: () {},
-              //     child: new Text(
-              //       "See More >>>",
-              //       style: new TextStyle(
-              //         color: Colors.blue[700],
-              //       ),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),
