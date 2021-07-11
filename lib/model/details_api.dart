@@ -1,4 +1,4 @@
-class DetailsAPI{
+class DetailsAPI {
   String title;
   String year;
   String rated;
@@ -10,9 +10,20 @@ class DetailsAPI{
   String plots;
   String poster;
 
-  DetailsAPI({this.title, this.year, this.rated, this.released, this.runtime, this.genre, this.director, this.actors, this.plots, this.poster});
+  DetailsAPI({
+    this.title,
+    this.year,
+    this.rated,
+    this.released,
+    this.runtime,
+    this.genre,
+    this.director,
+    this.actors,
+    this.plots,
+    this.poster,
+  });
 
-  factory DetailsAPI.source(Map<String, dynamic> object){
+  factory DetailsAPI.source(Map<String, dynamic> object) {
     return DetailsAPI(
       title: object['Title'],
       year: object['Year'],
