@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_api2/model/details_api.dart';
-import 'package:flutter_api2/screens/details_movie.dart';
 import 'package:flutter_api2/services/connect_api.dart';
+import 'package:flutter_api2/widget/card_movie.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-bool isSearching = false;
-final titleController = TextEditingController();
-
-var titleAPI;
-// var titleAPI = "Avengers";
-ConnectAPI connectAPI = ConnectAPI();
-DetailsAPI detailsAPI = DetailsAPI();
-
 class _HomePageState extends State<HomePage> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  // var formKeyLocal;
-  // _HomePageState({this.titleAPI});
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  ConnectAPI connectAPI = ConnectAPI();
+  DetailsAPI detailsAPI = DetailsAPI();
 
+  final titleController = TextEditingController();
+  bool isSearching = false;
+
+  var titleAPI;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,31 +41,6 @@ class _HomePageState extends State<HomePage> {
                   hintStyle: new TextStyle(fontSize: 15),
                 ),
               ),
-        // actions: [
-        //   isSearching
-        //       ? IconButton(
-        //           icon: Icon(
-        //             Icons.cancel,
-        //             color: Colors.black,
-        //           ),
-        //           onPressed: () {
-        //             setState(() {
-        //               isSearching = false;
-        //             });
-        //           },
-        //         )
-        //       : IconButton(
-        //           icon: Icon(
-        //             Icons.search,
-        //             color: Colors.black,
-        //           ),
-        //           onPressed: () {
-        //             setState(() {
-        //               isSearching = true;
-        //             });
-        //           },
-        //         ),
-        // ],
       ),
       body: new SingleChildScrollView(
         child: new Column(
@@ -78,11 +49,8 @@ class _HomePageState extends State<HomePage> {
             new Container(
               padding: new EdgeInsets.symmetric(horizontal: 5),
               width: double.infinity,
-              // height: 200,
               margin: new EdgeInsets.symmetric(horizontal: 20),
-              // color: Colors.red,
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   new Text(
@@ -111,7 +79,6 @@ class _HomePageState extends State<HomePage> {
             new Container(
               // height: 200,
               margin: new EdgeInsets.symmetric(horizontal: 20),
-              // color: Colors.red,
               child: new Text(
                 "Cari Disini!",
                 style: new TextStyle(
@@ -127,11 +94,35 @@ class _HomePageState extends State<HomePage> {
             new Form(
               key: formKey,
               child: new Container(
-                // height: 200,
+                height: 60,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      spreadRadius: 1,
+                      offset: Offset(0, 7),
+                      blurRadius: 8,
+                      color: Colors.black26,
+                    ),
+                  ],
+                ),
                 margin: new EdgeInsets.symmetric(horizontal: 20),
-                // color: Colors.red,
                 child: new TextFormField(
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (term) {
+                    if (formKey.currentState.validate()) {
+                      titleAPI = titleController.text;
+                      connectAPI.getData(titleAPI).then((value) {
+                        detailsAPI = value;
+                        setState(() {});
+                      });
+                    }
+                  },
+                  controller: titleController,
                   decoration: new InputDecoration(
+                    border: InputBorder.none,
                     prefixIcon: Icon(Icons.search),
                     suffixIcon: (titleController.text.isNotEmpty)
                         ? IconButton(
@@ -139,7 +130,6 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () => titleController.clear(),
                           )
                         : null,
-                    // icon: Icon(Icons.search),
                     hintText: "Search Movies Here",
                     hintStyle: new TextStyle(fontSize: 15),
                   ),
@@ -150,7 +140,6 @@ class _HomePageState extends State<HomePage> {
                       return null;
                     }
                   },
-                  controller: titleController,
                 ),
               ),
             ),
@@ -174,11 +163,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onPressed: () {
+                  FocusScope.of(context).unfocus();
                   if (formKey.currentState.validate()) {
                     // connectAPI.t = titleController.toString();
                     titleAPI = titleController.text;
                     connectAPI.getData(titleAPI).then((value) {
                       detailsAPI = value;
+                      print(detailsAPI.title);
                       setState(() {});
                     });
                   }
@@ -189,9 +180,7 @@ class _HomePageState extends State<HomePage> {
 
             //Text = Hasil Pencarian Disini
             new Container(
-              // height: 200,
               margin: new EdgeInsets.symmetric(horizontal: 20),
-              // color: Colors.red,
               child: new Text(
                 "Hasil Pencarian Disini",
                 style: new TextStyle(
@@ -204,12 +193,18 @@ class _HomePageState extends State<HomePage> {
             new SizedBox(height: 20),
 
             //Hasil Film yang muncul
-            new FutureBuilder(
+
+            FutureBuilder(
+              // initialData: detailsAPI,
               future: connectAPI.getData(titleAPI),
               builder:
                   (BuildContext context, AsyncSnapshot<DetailsAPI> snapshot) {
                 if (snapshot.hasData) {
-                  return MovDesc();
+                  return MovDesc(
+                    titleController: titleController,
+                    connectAPI: connectAPI,
+                    detailsAPI: detailsAPI,
+                  );
                 } else {
                   return Container();
                 }
@@ -217,128 +212,6 @@ class _HomePageState extends State<HomePage> {
             ),
             new SizedBox(height: 20),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class MovDesc extends StatelessWidget {
-  const MovDesc({
-    Key key,
-    // @required this.detailsAPI,
-  }) : super(key: key);
-
-  // final DetailsAPI detailsAPI;
-
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      width: double.infinity,
-      height: 220,
-      margin: new EdgeInsets.symmetric(horizontal: 20),
-      // color: Colors.green,
-      child: Center(
-        child: new Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          color: Colors.teal[100],
-          elevation: 15,
-          child: new Column(
-            children: [
-              Container(
-                margin: new EdgeInsets.symmetric(vertical: 10),
-                child: new ListTile(
-                  title: Row(
-                    children: [
-                      new SizedBox(
-                        height: 160,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12.0),
-                          child: new Image(
-                            image: NetworkImage(
-                              detailsAPI.poster.toString(),
-                            ),
-                          ),
-                        ),
-                      ),
-                      new Flexible(
-                        child: new Padding(
-                          padding: new EdgeInsets.only(left: 10),
-                          child: new Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              new Text(
-                                (detailsAPI != null)
-                                    ? detailsAPI.title.toString() +
-                                        " (" +
-                                        detailsAPI.year.toString() +
-                                        ")"
-                                    : "Tidak Ada Data Judul",
-                                style: new TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24,
-                                  fontFamily: "SF",
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              new SizedBox(
-                                height: 10,
-                              ),
-                              new Text(
-                                (detailsAPI != null)
-                                    ? detailsAPI.plots.toString()
-                                    : "Tidak Ada Data Deskripsi",
-                                style: new TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontFamily: "SF",
-                                  // fontWeight: FontWeight.w700,
-                                ),
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.justify,
-                              ),
-                              new SizedBox(
-                                height: 5,
-                              ),
-                              new InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) {
-                                      titleAPI = titleController.text;
-                                      connectAPI
-                                          .getData(titleAPI)
-                                          .then((value) {
-                                        detailsAPI = value;
-                                        // setState(() {});
-                                      });
-                                      return DetailsMovie(
-                                          detailsAPI: detailsAPI);
-                                    }),
-                                  );
-                                },
-                                child: new Text(
-                                  "See Details >>>",
-                                  style: new TextStyle(
-                                    color: Colors.blue[700],
-                                  ),
-                                  // textAlign: TextAlign.right,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
