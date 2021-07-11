@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_api2/details_api.dart';
+import 'package:flutter_api2/model/details_api.dart';
 
 class DetailsMovie extends StatelessWidget {
   final DetailsAPI detailsAPI;
